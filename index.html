@@ -8,15 +8,26 @@
     <style>
         body {
             margin: 0; padding: 0;
-            /* แก้ไข: ใช้ไฟล์ photo11.png เป็นพื้นหลัง ล็อกห้ามขยับ ห้ามเลื่อน */
-            background: url('photo11.png') no-repeat center center fixed;
-            background-size: cover;
             font-family: 'Prompt', sans-serif;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            height: 100vh; overflow: hidden;
+            height: 100vh; 
+            height: -webkit-fill-available;
+            overflow: hidden;
             touch-action: manipulation;
             user-select: none;
             position: relative;
+        }
+
+        /* ล็อกพื้นหลัง photo11.jpg แยกเลเยอร์ ห้ามขยับ ห้ามเลื่อน 100% */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: url('photo11.jpg') no-repeat center center;
+            background-size: cover;
+            z-index: -1;
+            transform: translate3d(0, 0, 0);
+            will-change: transform;
         }
 
         .butterfly {
@@ -50,7 +61,6 @@
             transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* เพิ่มเติม: อนิเมชันสำหรับสั่นช่อดอกไม้เพื่อดึงดูดสายตา */
         @keyframes bouquetWobble {
             0% { transform: scale(1.15) rotate(0deg); }
             25% { transform: scale(1.18) rotate(-3deg); }
@@ -92,7 +102,6 @@
             cursor: pointer; pointer-events: auto;
             object-fit: cover;
             border-radius: 4px;
-            /* ลบแอนิเมชัน bounce แบบเดิมออกเพื่อให้รักษาความเอียงที่สุ่มมาตอนกระจายตัว */
         }
 
         #photo-viewer {
@@ -209,16 +218,16 @@
         let isBouquetStage = false;
         
         const captions = [
-            "สุขสันต์วันครบรอบ1เดือน", 
-            "สุขสันต์วันครบรอบ1เดือน", 
-            "สุขสันต์วันครบรอบ1เดือน", 
-            "สุขสันต์วันครบรอบ1เดือน", 
-            "สุขสันต์วันครบรอบ1เดือน", 
-            "สุขสันต์วันครบรอบ1เดือน", 
-            "สุขสันต์วันครบรอบ1เดือน", 
-            "สุขสันต์วันครบรอบ1เดือน", 
-            "สุขสันต์วันครบรอบ1เดือน", 
-            "สุขสันต์วันครบรอบ1เดือน"
+            "สุขสันต์วันครบรอบนะ", 
+            "สุขสันต์วันครบรอบนะ", 
+            "สุขสันต์วันครบรอบนะ", 
+            "สุขสันต์วันครบรอบนะ", 
+            "สุขสันต์วันครบรอบนะ", 
+            "สุขสันต์วันครบรอบนะ", 
+            "สุขสันต์วันครบรอบนะ", 
+            "สุขสันต์วันครบรอบนะ", 
+            "สุขสันต์วันครบรอบนะ", 
+            "สุขสันต์วันครบรอบนะ"
         ];
 
         const statusText = document.getElementById('status-text');
@@ -278,7 +287,6 @@
                 plantImg.src = 'bouquet.png'; 
                 
                 setTimeout(() => {
-                    /* แก้ไข: เพิ่ม Class wobble-active เพื่อให้ช่อดอกไม้สั่นดึงดูดสายตา */
                     plantImg.classList.add('wobble-active');
                 }, 50);
 
@@ -291,7 +299,6 @@
                     plantImg.style.cursor = 'pointer';
                     plantImg.onclick = () => {
                         bgMusic.play().catch(e => console.log("Music play blocked"));
-                        /* แก้ไข: พอกดคลิกแล้ว ให้ช่อดอกไม้หยุดสั่นทันที */
                         plantImg.classList.remove('wobble-active');
                         plantImg.style.transform = "scale(1.15) rotate(0deg)";
                         explode();
@@ -330,15 +337,12 @@
                 const jitterY = (Math.random() - 0.5) * 15;
                 const finalX = pos.x + jitterX;
                 const finalY = pos.y + jitterY;
-                
-                /* แก้ไข: บังคับค่าสุ่มเอียงเล็กน้อยตอนกระจายตัวออกมา (สุ่มมุมเอียงระหว่าง -15 ถึง +15 องศา) */
                 const rotate = (Math.random() - 0.5) * 30;
 
                 setTimeout(() => {
                     img.style.left = `calc(50% + ${finalX}px)`;
                     img.style.top = `calc(50% + ${finalY}px)`;
                     img.style.transform = `translate(-50%, -50%) rotate(${rotate}deg) scale(1)`;
-                    img.style.animationDelay = (Math.random() * 2) + "s";
                 }, i * 60);
             }
 
